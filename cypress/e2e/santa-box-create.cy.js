@@ -28,12 +28,12 @@ describe("user can create a box and run it", () => {
   it("user logins and create a box", () => {
     cy.visit("/login");
     cy.login(users.userAutor.email, users.userAutor.password);
-    cy.contains("Создать коробку").click();
+    cy.get('.home-page-buttons > [href="/box/new"] > .btn-main').click();
     cy.get(boxPage.boxNameField).type(newBoxName);
     cy.get(generalElements.arrowRight).click();
     cy.get(boxPage.sixthIcon).click();
     cy.get(generalElements.arrowRight).click();
-    cy.get(boxPage.giftPriceToggle).check({ force: true });
+    cy.get(".switch__toggle").click();
     cy.get(boxPage.maxAnount).type(maxAmount);
     cy.get(boxPage.currency).select(currency);
     cy.get(generalElements.arrowRight).click();
@@ -58,6 +58,7 @@ describe("user can create a box and run it", () => {
       });
     cy.clearCookies();
   });
+
   it("approve as user1", () => {
     cy.visit(inviteLink);
     cy.get(generalElements.submitButton).click();
@@ -80,6 +81,7 @@ describe("user can create a box and run it", () => {
   after("delete box", () => {
     cy.visit("/login");
     cy.login(users.userAutor.email, users.userAutor.password);
+
     cy.get(
       '.layout-1__header-wrapper-fixed > .layout-1__header > .header > .header__items > .layout-row-start > [href="/account/boxes"] > .header-item > .header-item__text > .txt--med'
     ).click();
