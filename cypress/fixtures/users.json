@@ -1,22 +1,22 @@
-{
-  "userAutor": {
+[
+  {
     "email": "nmorozova283@gmail.com",
     "password": "qwerty123",
     "name": "Anastasiia"
   },
-  "user1": {
+  {
     "email": "nmorozova283+test1@gmail.com",
     "password": "test1111",
     "name": "test1"
   },
-  "user2": {
+  {
     "email": "nmorozova283+test2@gmail.com",
     "password": "test2222",
     "name": "test2"
   },
-  "user3": {
+  {
     "email": "nmorozova283+test3@gmail.com",
     "password": "test3333",
     "name": "test3"
   }
-}
+]

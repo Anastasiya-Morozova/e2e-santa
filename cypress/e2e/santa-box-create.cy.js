@@ -27,7 +27,7 @@ describe("user can create a box and run it", () => {
 
   it("user logins and create a box", () => {
     cy.visit("/login");
-    cy.login(users.userAutor.email, users.userAutor.password);
+    cy.login(users[0].email, users[0].password);
     cy.get('.home-page-buttons > [href="/box/new"] > .btn-main').click();
     cy.get(boxPage.boxNameField).type(newBoxName);
     cy.get(generalElements.arrowRight).click();
@@ -36,7 +36,6 @@ describe("user can create a box and run it", () => {
     cy.get(".switch__toggle").click();
     cy.get(boxPage.maxAnount).type(maxAmount);
     cy.get(boxPage.currency).select(currency);
-    cy.get(generalElements.arrowRight).click();
     cy.get(generalElements.arrowRight).click();
     cy.get(generalElements.arrowRight).click();
     cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
@@ -50,31 +49,15 @@ describe("user can create a box and run it", () => {
   });
 
   it("add participants", () => {
+    //inviting users without confirmation via emails
     cy.get(generalElements.submitButton).click();
-    cy.get(invitePage.inviteLink)
-      .invoke("text")
-      .then((link) => {
-        inviteLink = link;
-      });
-    cy.clearCookies();
-  });
-
-  it("approve as user1", () => {
-    cy.visit(inviteLink);
-    cy.get(generalElements.submitButton).click();
-    cy.contains("войдите").click();
-    cy.login(users.user1.email, users.user1.password);
-    cy.contains("Создать карточку участника").should("exist");
-    cy.get(generalElements.submitButton).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(inviteeBoxPage.wishesInput).type(wishes);
-    cy.get(generalElements.arrowRight).click();
-    cy.get(inviteeDashboardPage.noticeForInvitee)
-      .invoke("text")
-      .then((text) => {
-        expect(text).to.contain("Это — анонимный чат с вашим Тайным Сантой");
-      });
+    cy.get(".switch__toggle").click();
+    for (let i = 0; i < users.length-1; i++) {
+      cy.get(`:nth-child(${i*2+1}) > .frm-wrapper > #input-table-${i}`).type(users[i+1].name);
+      cy.get(`:nth-child(${i*2+2}) > .frm-wrapper > #input-table-${i}`).type(users[i+1].email);
+    }
+    cy.get(invitePage.inviteBtn).click();
+    cy.get('.txt-secondary > .base--clickable').contains("добавить еще участников.").should("exist");
     cy.clearCookies();
   });
 
