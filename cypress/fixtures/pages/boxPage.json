@@ -3,5 +3,6 @@
   "sixthIcon": ":nth-child(6) > .picture_svg_wrapper",
   "giftPriceToggle": "input",
   "maxAnount": ".MuiGrid-grid-xs-5 .frm",
-  "currency": ".MuiGrid-grid-xs-7 .frm"
+  "currency": ".MuiGrid-grid-xs-7 .frm",
+  "idField": ":nth-child(3) > .frm"
 }
