@@ -1,4 +1,7 @@
 {
   "inviteLink": ":nth-child(2) > .form-page-group__main b",
-  "inviteBtn": ".form-page__buttons > .btn-main"
+  "inviteBtn": ".form-page__buttons > .btn-main",
+  "settingsBtn": ".layout-1__header-wrapper-fixed > .layout-1__header-secondary > .header-secondary > .header-secondary__right-item > .toggle-menu-wrapper > .toggle-menu-button > .toggle-menu-button--inner",
+  "tossing": ".layout-1__header-wrapper-fixed > .layout-1__header-secondary__menu > .header-secondary-menu > .organizer-menu > .organizer-menu__wrapper > :nth-child(2) > .txt--med",
+  "tossingBtn": ".santa-modal_content_buttons > .btn-main"
 }

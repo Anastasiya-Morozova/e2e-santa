@@ -58,13 +58,19 @@ describe("user can create a box and run it", () => {
     }
     cy.get(invitePage.inviteBtn).click();
     cy.get('.txt-secondary > .base--clickable').contains("добавить еще участников.").should("exist");
-    cy.clearCookies();
   });
+
+  it("tossing",()=>{
+    cy.get(invitePage.settingsBtn).click();
+    cy.get(invitePage.tossing).click();
+    cy.get(generalElements.submitButton).click();
+    cy.get(invitePage.tossingBtn).click();
+    cy.clearCookies();
+  })
 
   after("delete box", () => {
     cy.visit("/login");
-    cy.login(users.userAutor.email, users.userAutor.password);
-
+    cy.login(users[0].email, users[0].password);
     cy.get(
       '.layout-1__header-wrapper-fixed > .layout-1__header > .header > .header__items > .layout-row-start > [href="/account/boxes"] > .header-item > .header-item__text > .txt--med'
     ).click();
