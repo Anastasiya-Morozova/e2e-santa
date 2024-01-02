@@ -1,10 +1,6 @@
 const users = require("../fixtures/users.json");
-const boxPage = require("../fixtures/pages/boxPage.json");
-const generalElements = require("../fixtures/pages/general.json");
 const dashboardPage = require("../fixtures/pages/dashboardPage.json");
-const invitePage = require("../fixtures/pages/invitePage.json");
-const inviteeBoxPage = require("../fixtures/pages/inviteeBoxPage.json");
-const inviteeDashboardPage = require("../fixtures/pages/inviteeDashboardPage.json");
+
 import { faker } from "@faker-js/faker";
 
 describe("user can create a box and run it", () => {
@@ -20,30 +16,16 @@ describe("user can create a box and run it", () => {
   //пользователь 1 логинится
   //пользователь 1 запускает жеребьевку
   let newBoxName = faker.word.noun({ length: { min: 5, max: 10 } });
-  let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective();
   let maxAmount = 50;
   let currency = "Евро";
-  let inviteLink;
-  let boxKey;
+  var boxKey = [];
 
   it("user logins and create a box", () => {
     cy.visit("/login");
     cy.login(users[0].email, users[0].password);
-    cy.get('.home-page-buttons > [href="/box/new"] > .btn-main').click();
-    cy.get(boxPage.boxNameField).type(newBoxName);
-    cy.get(boxPage.idField)
-      .invoke('val')
-      .then((value) => {
-        boxKey = value;
-      });
-    cy.get(generalElements.arrowRight).click();
-    cy.get(boxPage.sixthIcon).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(".switch__toggle").click();
-    cy.get(boxPage.maxAnount).type(maxAmount);
-    cy.get(boxPage.currency).select(currency);
-    cy.get(generalElements.arrowRight).click();
-    cy.get(generalElements.arrowRight).click();
+    cy.createBox(newBoxName, maxAmount, currency).then((val) => {
+      boxKey.push(val);
+    });
     cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
     cy.get(".layout-1__header-wrapper-fixed .toggle-menu-item span")
       .invoke("text")
@@ -56,27 +38,25 @@ describe("user can create a box and run it", () => {
 
   it("add participants", () => {
     //inviting users without confirmation via emails
-    cy.get(generalElements.submitButton).click();
-    cy.get(".switch__toggle").click();
-    for (let i = 0; i < users.length-1; i++) {
-      cy.get(`:nth-child(${i*2+1}) > .frm-wrapper > #input-table-${i}`).type(users[i+1].name);
-      cy.get(`:nth-child(${i*2+2}) > .frm-wrapper > #input-table-${i}`).type(users[i+1].email);
-    }
-    cy.get(invitePage.inviteBtn).click();
-    cy.get('.txt-secondary > .base--clickable').contains("добавить еще участников.").should("exist");
+    cy.addUsers(users);
+    cy.get(".txt-secondary > .base--clickable")
+      .contains("добавить еще участников.")
+      .should("exist");
   });
 
-  it("tossing",()=>{
-    cy.get(invitePage.settingsBtn).click();
-    cy.get(invitePage.tossing).click();
-    cy.get(generalElements.submitButton).click();
-    cy.get(invitePage.tossingBtn).click();
+  it("tossing", () => {
+    cy.toss();
+    cy.get(".picture-notice__title").should(
+      "have.text",
+      "Жеребьевка проведена"
+    );
     cy.clearCookies();
-  })
+  });
 
   after("delete box", () => {
+    cy.clearCookies();
     cy.visit("/login");
-    cy.login(users[0].email, users[0].password); 
-    cy.request("DELETE",`https://staging.lpitko.ru/api/box/${boxKey}`);
+    cy.login(users[0].email, users[0].password);
+    cy.request("DELETE", `https://staging.lpitko.ru/api/box/${boxKey[0]}`);
   });
 });
