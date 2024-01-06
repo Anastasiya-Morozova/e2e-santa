@@ -45,12 +45,12 @@ Cypress.Commands.add("toss", () => {
 Cypress.Commands.add("addUsers", (users) => {
   cy.get(generalElements.submitButton).click();
   cy.get(".switch__toggle").click();
-  for (let i = 0; i < users.length - 1; i++) {
+  for (let i = 0; i < users.length; i++) {
     cy.get(`:nth-child(${i * 2 + 1}) > .frm-wrapper > #input-table-${i}`).type(
-      users[i + 1].name
+      users[i].name
     );
     cy.get(`:nth-child(${i * 2 + 2}) > .frm-wrapper > #input-table-${i}`).type(
-      users[i + 1].email
+      users[i].email
     );
   }
   cy.get(invitePage.inviteBtn).click();
